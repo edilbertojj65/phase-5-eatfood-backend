@@ -1,0 +1,5 @@
+class Photo < ApplicationRecord
+  belongs_to :review ,  class_name: "Review", optional: true
+  belongs_to :group_user
+  has_many   :review , dependent: :destroy
+end
