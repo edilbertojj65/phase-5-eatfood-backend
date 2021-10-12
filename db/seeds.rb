@@ -10,8 +10,7 @@ Group.destroy_all
 GroupUser.destroy_all
 Photo.destroy_all
 Review.destroy_all
-
-100.times do |index|
+20.times do |index|
    
     user1 = User.create!(name:Faker::Name.name, email:Faker::Internet.email, dateObird:Faker::Time.between(from: 180.months.ago, to: 1.week.ago))
      

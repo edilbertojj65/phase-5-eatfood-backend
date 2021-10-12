@@ -1,10 +1,28 @@
 class SessionsController < ApplicationController
+  ActionController::Parameters.permit_all_parameters = true
+
+  # GET user
+  def index
+    user = User.all
+    render json: user
+  end
+
+  def show
+    user = User.find_by(id: session[:user_id])
+    if user
+      render json: user
+    else
+      render json: { error: "Not authorized" }, status: :unauthorized
+    end
+  end
+
     def create
-        # byebug
+     #    byebug
         user = User.find_by(name: params[:name])
         if !user
           render json: {error: "no user found"}
         else
+     #     byebug
           session[:user_id] = user.id
           render json: user
         end
@@ -19,6 +37,6 @@ class SessionsController < ApplicationController
      private
     
      def login_params 
-        params.permit(:user_name)
+      params.require(:user).params.permit(:user_name, :email, :dateObird)
      end
 end

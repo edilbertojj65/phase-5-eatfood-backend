@@ -65,7 +65,6 @@ ActiveRecord::Schema.define(version: 2021_09_29_212219) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  add_foreign_key "group_users", "groups"
   add_foreign_key "groups", "users"
   add_foreign_key "photos", "group_users"
   add_foreign_key "photos", "users"

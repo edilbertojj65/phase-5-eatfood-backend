@@ -3,9 +3,9 @@ class ReviewsController < ApplicationController
   ActionController::Parameters.permit_all_parameters = true
   # GET /reviews
   def index
-    # byebug
+   #  byebug
     reviews = Review.all
-    render json: reviews
+    render json: reviews , include: :photo
   end
 
   # GET /reviews/1
@@ -17,10 +17,10 @@ class ReviewsController < ApplicationController
 
   # POST /reviews
   def create
-    # byebug
+   #  byebug
     review = Review.create!(params[:review])
     # byebug
-    render json: review, status: :created
+    render json: review, status: :created , include: :photo
   end
 
   # PATCH/PUT /reviews/1
