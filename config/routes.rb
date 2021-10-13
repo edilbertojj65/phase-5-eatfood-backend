@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  
+  root 'welcome#index' 
   resources :reviews , only:  [:index, :show, :create, :destroy, :update]
   resources :photos, only:  [:index, :show, :create, :destroy, :update]
   resources :group_users,  only:  [:index, :show, :create, :destroy, :update]
