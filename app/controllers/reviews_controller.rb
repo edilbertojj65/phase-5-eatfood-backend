@@ -1,4 +1,5 @@
 class ReviewsController < ApplicationController
+  before_action :authorize
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response 
   ActionController::Parameters.permit_all_parameters = true
   # GET /reviews
@@ -10,16 +11,13 @@ class ReviewsController < ApplicationController
 
   # GET /reviews/1
   def show
-    byebug
     review = Review.find(params[:id])
     render json: review
   end
 
   # POST /reviews
   def create
-   #  byebug
     review = Review.create!(params[:review])
-    # byebug
     render json: review, status: :created , include: :photo
   end
 
@@ -40,7 +38,11 @@ class ReviewsController < ApplicationController
   end
 
   private
-    
+
+  def authorize
+    return render json: { error: " User Not authorized" }, status: :unauthorized unless session.include? :user_id
+  end
+  
     # Only allow a list of trusted parameters through.
     def review_params
       params.require(:review).permit(:comment, :rating, :photo_id, :group_user_id)

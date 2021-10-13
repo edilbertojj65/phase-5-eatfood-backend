@@ -1,4 +1,5 @@
 class PhotosController < ApplicationController
+  before_action :authorize
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
   ActionController::Parameters.permit_all_parameters = true
   
@@ -11,7 +12,6 @@ class PhotosController < ApplicationController
 
   # GET /photos/1
   def show
-    byebug
     photo = Photo.find(params[:id])
     render json: photo
   end
@@ -20,7 +20,6 @@ class PhotosController < ApplicationController
   def create
     photo = Photo.create!(params[:photo])
     if photo.valid?
-    # byebug
        render json: photo, status: :created
       else
         render json: { error: photo.errors }, status: :unprocessable_entity
@@ -44,6 +43,9 @@ class PhotosController < ApplicationController
   end
 
   private
+  def authorize
+    return render json: { error: " User Not authorized" }, status: :unauthorized unless session.include? :user_id
+  end
 
   def render_not_found_response
     render json: { error: "photos not found" }, status: :not_found

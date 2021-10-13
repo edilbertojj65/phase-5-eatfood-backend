@@ -1,4 +1,5 @@
 class GroupsController < ApplicationController
+  before_action :authorize
   ActionController::Parameters.permit_all_parameters = true
   
 
@@ -10,14 +11,12 @@ class GroupsController < ApplicationController
 
   # GET /groups/1
   def show
-    # byebug
     group = Group.find(params[:id])
     render json: user
   end
 
   # POST /groups
   def create
-  #  byebug
     group = Group.create!(params[:group])
     render json: group, status: :created
   end
@@ -38,7 +37,10 @@ class GroupsController < ApplicationController
   end
 
   private
-    
+  
+  def authorize
+    return render json: { error: " User Not authorized" }, status: :unauthorized unless session.include? :user_id
+  end
     # Only allow a list of trusted parameters through.
     def group_params
       params.require(:group).permit(:name, :type, :user_id)

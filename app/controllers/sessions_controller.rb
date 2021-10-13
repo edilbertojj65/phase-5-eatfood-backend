@@ -17,19 +17,16 @@ class SessionsController < ApplicationController
   end
 
     def create
-     #    byebug
         user = User.find_by(name: params[:name])
         if !user
           render json: {error: "no user found"}
         else
-     #     byebug
           session[:user_id] = user.id
           render json: user
         end
      end
 
      def destroy
-      # byebug
         session.delete :user_id
         head :no_content
      end

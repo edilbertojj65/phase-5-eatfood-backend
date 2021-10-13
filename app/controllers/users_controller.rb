@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  before_action :authorize
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
 
   # GET /users
@@ -53,6 +54,10 @@ class UsersController < ApplicationController
   end
 
   private
+
+  def authorize
+    return render json: { error: " User Not authorized" }, status: :unauthorized unless session.include? :user_id
+  end
 
   def render_not_found_response
     render json: { error: "User not found" }, status: :not_found

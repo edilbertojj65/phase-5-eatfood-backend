@@ -1,4 +1,5 @@
 class GroupUsersController < ApplicationController
+  before_action :authorize
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
   ActionController::Parameters.permit_all_parameters = true
 
@@ -9,17 +10,15 @@ class GroupUsersController < ApplicationController
   end
 
   # GET /group_users/1
+  # byebug
   def show
-    # byebug
     group_users = GroupUser.find(params[:id])
     render json: group_users
   end
 
   # POST /group_users
   def create
-   # byebug
     group_users = GroupUser.create!(group_user_params)
-     
     render json: group_users, status: :created
   end
 
@@ -39,6 +38,11 @@ class GroupUsersController < ApplicationController
   end
 
   private
+
+  def authorize
+    return render json: { error: " User Not authorized" }, status: :unauthorized unless session.include? :user_id
+  end
+  
   def render_not_found_response
     render json: { error: "group users not found" }, status: :not_found
   end
